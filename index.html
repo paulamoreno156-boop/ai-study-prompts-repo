@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Study Prompts Repo - Paula Moreno</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#fcfcfc;color:#111;padding:0 0 40px}
+.top{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;background:#fff;position:sticky;top:0;z-index:10}
+.logo{display:flex;gap:10px;align-items:center}
+.ai{width:36px;height:36px;background:#111;color:#fff;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px}
+h1{font-size:16px;line-height:1.2}
+.badge-update{font-size:12px;color:#555;background:#f3f4f6;border:1px solid #e5e7eb;padding:4px 10px;border-radius:20px;display:inline-flex;gap:6px;align-items:center;margin-top:4px}
+.dot{width:8px;height:8px;background:#22c55e;border-radius:50%;display:inline-block}
+.btn-add{background:#111;color:#fff;border:none;padding:10px 16px;border-radius:24px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;cursor:pointer}
+.stats{max-width:1100px;margin:20px auto;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px}
+.card-stat{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:16px}
+.label{font-size:11px;letter-spacing:1px;color:#9ca3af;text-transform:uppercase;font-weight:600;display:flex;justify-content:space-between}
+.num{font-size:32px;font-weight:800;margin:8px 0 4px}
+.mini{background:#ecfdf5;color:#059669;padding:3px 8px;border-radius:8px;font-size:12px;font-weight:600}
+.bar{height:6px;background:#f3f4f6;border-radius:10px;margin-top:12px;overflow:hidden}
+.bar-fill{height:100%;background:#111;width:70%;border-radius:10px}
+.card-stat.dark{background:#111;color:#fff;border-color:#111}
+.card-stat.dark.label{color:#9ca3af}
+.dots{display:flex;gap:6px;margin-top:14px}
+.dots span{width:12px;height:12px;border-radius:50%;display:inline-block}
+.filtros{max-width:1100px;margin:10px auto;padding:0 16px;display:flex;gap:8px;overflow:auto;scrollbar-width:none}
+.filtros::-webkit-scrollbar{display:none}
+.pill{white-space:nowrap;border:1px solid #e5e7eb;background:#fff;padding:8px 14px;border-radius:20px;font-size:14px;cursor:pointer}
+.pill.ativo{background:#111;color:#fff;border-color:#111}
+.busca-wrap{max-width:1100px;margin:16px auto;padding:0 16px}
+#busca{width:100%;padding:12px 14px;border-radius:14px;border:1px solid #e5e7eb;background:#fff;font-size:14px}
+.contagem{max-width:1100px;margin:12px auto;padding:0 16px;color:#6b7280;font-size:14px}
+.grid{max-width:1100px;margin:10px auto;padding:0 16px;display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:16px;display:flex;flex-direction:column;position:relative}
+.top-card{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.badge-cat{padding:4px 10px;border-radius:20px;font-size:12px;background:#fef3c7;color:#d97706;border:1px solid #fde68a;display:inline-flex;align-items:center;gap:6px}
+.badge-cat::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
+.nivel{font-size:12px;color:#6b7280;display:flex;align-items:center;gap:6px}
+.nivel::before{content:'';width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block}
+.card h3{font-size:16px;margin-bottom:8px;line-height:1.3}
+.desc{font-size:13px;color:#6b7280;margin-bottom:14px;flex:1}
+.meta{font-size:12px;color:#9ca3af;margin-bottom:12px}
+.btn-copiar{margin-top:auto;width:100%;padding:10px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;font-weight:600;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:6px;color:#2563eb}
+.btn-copiar:active{background:#111;color:#fff}
+.prompt-full{display:none}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:20px;padding:20px;width:100%;max-width:480px;max-height:90vh;overflow:auto}
+.modal h2{font-size:18px;margin-bottom:12px}
+.modal label{font-size:12px;color:#6b7280;text-transform:uppercase;font-weight:600;display:block;margin-top:12px;margin-bottom:4px}
+.modal input,.modal textarea,.modal select{width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:12px;font-size:14px;font-family:inherit}
+.modal textarea{min-height:80px;resize:vertical}
+.modal.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btns{display:flex;gap:10px;margin-top:16px}
+.btn-cancel{flex:1;padding:12px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;font-weight:600}
+.btn-save{flex:1;padding:12px;background:#111;color:#fff;border:none;border-radius:12px;font-weight:600}
+.small{font-size:12px;color:#9ca3af;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="top">
+<div class="logo">
+<div class="ai">AI</div>
+<div>
+<h1>AI Study Prompts Repo -<br>Paula Moreno</h1>
+<div class="badge-update"><span class="dot"></span>Última atualização: 27/09/2026</div>
+</div>
+</div>
+<button class="btn-add" onclick="abrirModal()">+ Adicionar novo link</button>
+</div>
+<div class="stats">
+<div class="card-stat">
+<div class="label">TOTAL PROMPTS <span>↗</span></div>
+<div class="num"><span id="totalNum">17</span> <span class="mini" id="miniSemana">+8 esta semana</span></div>
+<div class="bar"><div class="bar-fill" id="barFill"></div></div>
+</div>
+<div class="card-stat">
+<div class="label">CATEGORIAS</div>
+<div class="num"><span id="catNum">6</span> <span style="font-size:14px;font-weight:500;color:#6b7280">ativas</span></div>
+<div class="dots"><span style="background:#f59e0b"></span><span style="background:#8b5cf6"></span><span style="background:#3b82f6"></span><span style="background:#10b981"></span><span style="background:#ef4444"></span><span style="background:#111"></span></div>
+</div>
+<div class="card-stat">
+<div class="label">FONTES</div>
+<div class="num"><span id="fonteNum">14</span> <span style="font-size:14px;font-weight:500;color:#6b7280">curadoria</span></div>
+<div style="font-size:12px;color:#6b7280;margin-top:8px">Gemini, Claude, TornA...</div>
+</div>
+<div class="card-stat dark">
+<div class="label">ATUALIZAÇÃO DIÁRIA</div>
+<div style="margin-top:12px;display:flex;align-items:center;gap:8px;font-weight:600"><span class="dot"></span> Ativa</div>
+<div style="font-size:13px;color:#9ca3af;margin-top:10px;line-height:1.4">Crawling automático + curadoria manual todo dia às 08:00 BRT</div>
+</div>
+</div>
+<div class="filtros" id="filtros"></div>
+<div class="busca-wrap"><input id="busca" placeholder="Buscar por titulo ou conteudo..." oninput="filtrar()"></div>
+<div class="contagem" id="contagem">Mostrando 17 de 17 prompts</div>
+<div class="grid" id="grid"></div>
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this) fecharModal()">
+<div class="modal">
+<h2>+ Adicionar novo prompt / link</h2>
+<label>Titulo</label>
+<input id="m_titulo" placeholder="Ex: Resumir video do YouTube">
+<div class="row">
+<div><label>Categoria</label><select id="m_cat"><option value="estudar">estudar</option><option value="pesquisa">pesquisa</option><option value="programacao">programacao</option><option value="escrita">escrita</option><option value="produtividade">produtividade</option><option value="carreira">carreira</option><option value="outro">outro</option></select></div>
+<div><label>Nivel</label><select id="m_nivel"><option>iniciante</option><option>intermediario</option><option>avancado</option></select></div>
+</div>
+<label>Descricao curta</label>
+<input id="m_desc" placeholder="O que esse prompt faz?">
+<label>Prompt completo / Link</label>
+<textarea id="m_prompt" placeholder="Cole aqui o prompt completo ou o link"></textarea>
+<label>Fonte</label>
+<input id="m_fonte" placeholder="Ex: ChatGPT, Gemini, meu link" value="Manual">
+<div class="btns">
+<button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+<button class="btn-save" onclick="salvarNovo()">Salvar</button>
+</div>
+<div class="small">O novo prompt vai aparecer no topo e ficará salvo no seu navegador.</div>
+</div>
+</div>
+<script>
+const promptsBase=[
+{titulo:"Explicar como se eu nao soubesse nada",cat:"estudar",nivel:"iniciante",desc:"Explique essa informacao como se eu nunca tivesse ouvido falar do tema.",prompt:"Explique [TEMA] como se eu nunca tivesse ouvido falar. TEMA: [cole aqui]",fonte:"Gemini Notebook",data:"26/09/2026"},
+{titulo:"Resumir como mapa mental",cat:"estudar",nivel:"iniciante",desc:"Transforma qualquer texto longo em mapa mental.",prompt:"Transforme este texto em mapa mental: TEXTO: [cole]",fonte:"ChatGPT",data:"26/09/2026"},
+{titulo:"Criar plano de estudos de 30 dias",cat:"estudar",nivel:"intermediario",desc:"Gera cronograma completo com pomodoro.",prompt:"Crie um plano de 30 dias para [ASSUNTO].",fonte:"Claude",data:"25/09/2026"},
+{titulo:"Gerar flashcards Anki",cat:"estudar",nivel:"iniciante",desc:"Converte materia em flashcards.",prompt:"Crie 10 flashcards: [cole]",fonte:"Gemini",data:"25/09/2026"},
+{titulo:"Tecnica Feynman",cat:"estudar",nivel:"intermediario",desc:"Explica e testa se voce entendeu.",prompt:"Explique [TEMA] com Feynman",fonte:"Perplexity",data:"24/09/2026"},
+{titulo:"Resumir artigo cientifico",cat:"pesquisa",nivel:"avancado",desc:"Resume em 5 partes.",prompt:"Resuma: 1 frase, 3 args, evidencias",fonte:"Claude",data:"24/09/2026"},
+{titulo:"Analisar fontes e vies",cat:"pesquisa",nivel:"avancado",desc:"Avalia se fonte e confiavel.",prompt:"Analise fonte: [cole link]",fonte:"Perplexity",data:"23/09/2026"},
+{titulo:"Extrair insights de PDF",cat:"pesquisa",nivel:"intermediario",desc:"Le PDF longo e extrai o que importa.",prompt:"Extraia 3 insights",fonte:"Gemini",data:"23/09/2026"},
+{titulo:"Debugador de codigo amigo",cat:"programacao",nivel:"iniciante",desc:"Encontra bug e explica.",prompt:"Aja como mentor. Codigo: [cole]",fonte:"ChatGPT",data:"22/09/2026"},
+{titulo:"Explicar codigo linha a linha",cat:"programacao",nivel:"iniciante",desc:"Explica codigo como iniciante.",prompt:"Explique linha a linha: [cole]",fonte:"Claude",data:"22/09/2026"},
+{titulo:"Criar projeto pratico",cat:"programacao",nivel:"intermediario",desc:"Cria ideia de projeto.",prompt:"Crie projeto para [TECNOLOGIA]",fonte:"ChatGPT",data:"21/09/2026"},
+{titulo:"Melhorar texto academico",cat:"escrita",nivel:"intermediario",desc:"Revisa texto academico.",prompt:"Revise este texto: [cole]",fonte:"Claude",data:"21/09/2026"},
+{titulo:"Revisar e simplificar",cat:"escrita",nivel:"iniciante",desc:"Deixa simples e direto.",prompt:"Simplifique este texto: [cole]",fonte:"Gemini",data:"20/09/2026"},
+{titulo:"Organizar tarefas com IA",cat:"produtividade",nivel:"iniciante",desc:"Transforma lista em plano do dia.",prompt:"Organize minhas tarefas: [liste]",fonte:"ChatGPT",data:"20/09/2026"},
+{titulo:"Revisao espacada inteligente",cat:"produtividade",nivel:"intermediario",desc:"Diz o que revisar hoje.",prompt:"O que revisar hoje?",fonte:"Gemini",data:"19/09/2026"},
+{titulo:"Simular entrevista de emprego",cat:"carreira",nivel:"intermediario",desc:"Treina para entrevista.",prompt:"Simule entrevista para [CARGO]",fonte:"Claude",data:"19/09/2026"},
+{titulo:"Melhorar LinkedIn e curriculo",cat:"carreira",nivel:"avancado",desc:"Transforma experiencia em descricao forte.",prompt:"Melhore experiencia: [cole]",fonte:"ChatGPT",data:"18/09/2026"}
+];
+let prompts = JSON.parse(localStorage.getItem('pm_prompts_v2')||'null') || [...promptsBase];
+function saveLocal(){ localStorage.setItem('pm_prompts_v2', JSON.stringify(prompts)); }
+const cats=()=>["Todos",...new Set(prompts.map(p=>p.cat))];
+let catAtiva="Todos";
+function buildFiltros(){
+const filtrosEl=document.getElementById('filtros');
+filtrosEl.innerHTML='';
+cats().forEach(c=>{
+const b=document.createElement('button');
+b.className='pill'+(c===catAtiva?' ativo':'');
+b.textContent=c==='Todos'?`Todos ${prompts.length}`:`${c} ${prompts.filter(p=>p.cat===c).length}`;
+b.onclick=()=>{catAtiva=c;document.querySelectorAll('.pill').forEach(x=>x.classList.remove('ativo'));b.classList.add('ativo');filtrar();};
+filtrosEl.appendChild(b);
+});
+}
+function render(lista){
+const grid=document.getElementById('grid');
+grid.innerHTML='';
+lista.forEach((p,i)=>{
+const idx = prompts.indexOf(p);
+const div=document.createElement('div');
+div.className='card';
+div.innerHTML=`<div class="top-card"><span class="badge-cat">${p.cat}</span><span class="nivel">${p.nivel}</span></div><h3>${p.titulo}</h3><div class="desc">${p.desc}</div><div class="meta">${p.fonte}<br>${p.data}</div><button class="btn-copiar" onclick="copiar(${idx},this)">Copiar</button>`;
+grid.appendChild(div);
+});
+document.getElementById('contagem').textContent=`Mostrando ${lista.length} de ${prompts.length} prompts`;
+document.getElementById('totalNum').textContent=prompts.length;
+document.getElementById('catNum').textContent=new Set(prompts.map(p=>p.cat)).size;
+}
+function filtrar(){
+const termo=document.getElementById('busca').value.toLowerCase();
+const f=prompts.filter(p=>{
+const mCat=catAtiva==='Todos'||p.cat===catAtiva;
+const mBusca=!termo||p.titulo.toLowerCase().includes(termo)||p.desc.toLowerCase().includes(termo);
+return mCat&&mBusca;
+});
+render(f);
+}
+function copiar(i,btn){
+navigator.clipboard.writeText(prompts[i].prompt).then(()=>{
+btn.textContent='Copiado!';
+setTimeout(()=>btn.textContent='Copiar',1500);
+});
+}
+function abrirModal(){ document.getElementById('modalBg').classList.add('open'); }
+function fecharModal(){ document.getElementById('modalBg').classList.remove('open'); }
+function salvarNovo(){
+const titulo=document.getElementById('m_titulo').value.trim();
+const cat=document.getElementById('m_cat').value;
+const nivel=document.getElementById('m_nivel').value;
+const desc=document.getElementById('m_desc').value.trim()||titulo;
+const prompt=document.getElementById('m_prompt').value.trim();
+const fonte=document.getElementById('m_fonte').value.trim()||'Manual';
+if(!titulo||!prompt){ alert('Preencha titulo e prompt/link'); return; }
+const novo={titulo,cat,nivel,desc,prompt,fonte,data:new Date().toLocaleDateString('pt-BR')};
+prompts.unshift(novo);
+saveLocal();
+buildFiltros();
+filtrar();
+fecharModal();
+document.getElementById('m_titulo').value='';document.getElementById('m_desc').value='';document.getElementById('m_prompt').value='';
+}
+buildFiltros();
+render(prompts);
+</script>
+</body>
+</html>
